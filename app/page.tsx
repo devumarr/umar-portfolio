@@ -393,7 +393,7 @@ export default function Home() {
             What I do
           </p>
           <h2 className="mt-3 max-w-lg text-3xl font-semibold tracking-tight text-[#1A1612]">
-            I build the site. Customers find you and message you.
+            I build the site. Customers find you.
           </h2>
           <ServicesSlider />
         </section>
