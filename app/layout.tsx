@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Umar Farooq — Websites",
   description: "Shop websites and live tools by Umar Farooq.",
+  icons: {
+    icon: "/icon-192.jpg",
+  },
 };
 
 export default function RootLayout({

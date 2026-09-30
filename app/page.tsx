@@ -1,18 +1,128 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowUpRight,
-  MessageCircle,
-  Globe,
-  Smartphone,
-  LayoutGrid,
-  Sparkles,
-  Wallet,
-  Mail,
-} from "lucide-react";
+import React, { useRef, useEffect } from "react";
+import { ArrowUpRight, MessageCircle, Mail } from "lucide-react";
 
 const fade = { hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0 } };
+
+function ServicesSlider() {
+  const wrap = React.useRef<HTMLDivElement>(null);
+  const timer = React.useRef<number | null>(null);
+
+  const start = () => {
+    stop();
+    timer.current = window.setInterval(() => {
+      const el = wrap.current;
+      if (!el) return;
+      el.scrollLeft += 1.2;
+      const half = el.scrollWidth / 2;
+      if (half > 0 && el.scrollLeft >= half) el.scrollLeft -= half;
+    }, 16);
+  };
+
+  useEffect(() => {
+    const t = window.setTimeout(start, 200);
+    return () => {
+      window.clearTimeout(t);
+      stop();
+    };
+  }, []);
+
+  const stop = () => {
+    if (timer.current) window.clearInterval(timer.current);
+    timer.current = null;
+  };
+  const drag = useRef({ on: false, x: 0, left: 0 });
+
+  const onDown = (e: React.MouseEvent) => {
+    stop();
+    drag.current = {
+      on: true,
+      x: e.pageX,
+      left: wrap.current?.scrollLeft || 0,
+    };
+  };
+  const onMove = (e: React.MouseEvent) => {
+    if (!drag.current.on || !wrap.current) return;
+    wrap.current.scrollLeft = drag.current.left - (e.pageX - drag.current.x);
+    const half = wrap.current.scrollWidth / 2;
+    if (wrap.current.scrollLeft >= half) wrap.current.scrollLeft -= half;
+    if (wrap.current.scrollLeft <= 0) wrap.current.scrollLeft += half;
+  };
+
+  const onUp = () => {
+    drag.current.on = false;
+    start();
+  };
+  [];
+
+  const items = [
+    {
+      logo: "https://cdn.simpleicons.org/shopify/96BF48",
+      title: "Shop website",
+      text: "Name, hours and what you sell on one page.",
+    },
+    {
+      logo: "https://cdn.simpleicons.org/whatsapp/25D366",
+      title: "WhatsApp button",
+      text: "One tap opens your chat.",
+    },
+    {
+      logo: "https://cdn.simpleicons.org/android/3DDC84",
+      title: "Mobile first",
+      text: "Built for the phone first.",
+    },
+    {
+      logo: "https://cdn.simpleicons.org/googlemaps/4285F4",
+      title: "Map and address",
+      text: "Nearby people can find the shop.",
+    },
+    {
+      logo: "https://cdn.simpleicons.org/googlechrome/4285F4",
+      title: "Live link",
+      text: "A real URL for cards and Instagram.",
+    },
+    {
+      logo: "https://cdn.simpleicons.org/cloudflare/F38020",
+      title: "Fast delivery",
+      text: "Most sites go live in a few days.",
+    },
+  ];
+
+  return (
+    <div
+      ref={wrap}
+      onTouchStart={stop}
+      onTouchEnd={start}
+      onMouseDown={onDown}
+      onMouseMove={onMove}
+      onMouseUp={onUp}
+      onMouseLeave={() => {
+        drag.current.on = false;
+        start();
+      }}
+      className="mt-10 flex cursor-grab gap-5 overflow-x-auto pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      {items.concat(items).map((item, i) => (
+        <div
+          key={i}
+          className="w-[300px] shrink-0 rounded-[1.8rem] border border-[#E8D7BE] bg-[#FFFCF8] p-7 shadow-[0_10px_30px_rgba(26,22,18,0.05)] sm:w-[340px]"
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-[#E8D7BE]">
+            <img src={item.logo} alt="" className="h-6 w-6" />
+          </div>
+          <h3 className="mt-6 text-[17px] font-semibold text-[#1A1612]">
+            {item.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#6E5C49]">
+            {item.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const WORK = [
   {
@@ -104,7 +214,38 @@ const SKILLS = [
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
   },
 ];
+function TypeLines() {
+  const lines = [
+    "I build clean websites and live tools for shops and creators.",
+    "Fast pages. WhatsApp ready. You can open the work first.",
+  ];
+  const [i, setI] = useState(0);
+  const [n, setN] = useState(0);
+  const [out, setOut] = useState(false);
 
+  useEffect(() => {
+    const full = lines[i];
+    const wait = out ? 28 : n === full.length ? 1400 : 38;
+    const t = setTimeout(() => {
+      if (!out) {
+        if (n < full.length) setN(n + 1);
+        else setOut(true);
+      } else if (n > 0) setN(n - 1);
+      else {
+        setOut(false);
+        setI((i + 1) % lines.length);
+      }
+    }, wait);
+    return () => clearTimeout(t);
+  }, [i, n, out]);
+
+  return (
+    <p className="mt-5 min-h-[4.5rem] max-w-[28rem] text-[16px] leading-relaxed text-[#6E5C49] md:mt-6 md:text-[17px]">
+      {lines[i].slice(0, n)}
+      <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] bg-[#C45C26] animate-pulse" />
+    </p>
+  );
+}
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   return (
@@ -174,14 +315,11 @@ export default function Home() {
               />
             </div>
 
-            <p className="mt-5 max-w-[28rem] text-[16px] leading-relaxed text-[#6E5C49] md:mt-6 md:text-[17px]">
-              I build clean websites and live tools for shops and creators. Fast
-              pages. WhatsApp ready. You can open the work first.
-            </p>
+            <TypeLines />
             <div className="mt-7 flex flex-wrap items-center gap-3 md:mt-8">
               <a
                 href="https://wa.me/923259168123"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-[#D36C12] px-6 py-3 text-sm font-medium text-white shadow-[0_18px_40px_rgba(211,108,18,0.34)] transition hover:scale-[1.03] active:scale-[0.98]"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-[#D36C12] px-6 py-2.75 text-sm font-medium text-white shadow-[0_18px_40px_rgba(211,108,18,0.34)] transition hover:scale-[1.03] active:scale-[0.98]"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition duration-700 group-hover:translate-x-full" />
 
@@ -190,12 +328,27 @@ export default function Home() {
                 <span className="relative">WhatsApp</span>
               </a>
               <a
-                href="#work"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-white px-3 py-3 text-sm font-medium text-black shadow-[0_18px_40px_rgba(211,108,18,0.34)] transition hover:scale-[1.03] active:scale-[0.98]"
+                href="/umar-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className=" hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md active:translate-y-0 transition duration-200 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-5 py-2.5 text-sm font-medium text-stone-800 shadow-sm transition hover:border-orange-300 hover:shadow-md"
               >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition duration-700 group-hover:translate-x-full" />
-                View work
-                <ArrowUpRight className="h-4 w-4" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" x2="12" y1="15" y2="3" />
+                </svg>
+                Resume
               </a>
             </div>
           </div>
@@ -234,6 +387,15 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </section>
+        <section id="services" className="mt-24 overflow-hidden">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#C4A27A]">
+            What I do
+          </p>
+          <h2 className="mt-3 max-w-lg text-3xl font-semibold tracking-tight text-[#1A1612]">
+            I build the site. Customers find you and message you.
+          </h2>
+          <ServicesSlider />
         </section>
 
         <section id="work" className="mt-20">

@@ -67,3 +67,17 @@ html::-webkit-scrollbar {
 .skills-track:hover {
   animation-play-state: paused;
 }
+@keyframes slide-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.slide-track {
+  animation: slide-left 28s linear infinite;
+}
+.slide-track:hover {
+  animation-play-state: paused;
+}
