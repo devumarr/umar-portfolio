@@ -253,7 +253,7 @@ export default function Home() {
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(224,122,27,0.16),_transparent_42%)]" />
 
       <div className="relative mx-auto max-w-6xl px-5 py-6 md:px-8 md:py-8">
-        <nav className="z-50 mb-16 flex items-center justify-between rounded-full bg-[#FBF6EE] px-3 py-2 shadow-[0_8px_30px_rgba(80,40,10,0.08)] ring-1 ring-[#E8D7BE]">
+        <nav className="sticky top-3 z-50  mb-16 flex items-center justify-between rounded-full bg-[#FBF6EE] px-3 py-2 shadow-[0_8px_30px_rgba(80,40,10,0.08)] ring-1 ring-[#E8D7BE]">
           <div className="flex items-center gap-2.5 pl-1">
             <img
               src="/umar.jpg"
