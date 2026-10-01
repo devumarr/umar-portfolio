@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Umar Farooq — Websites",
+  title: "Umar Farooq - Websites",
   description: "Shop websites and live tools by Umar Farooq.",
   icons: {
-    icon: "/icon-192.jpg",
+    icon: "/icon-512.png",
+    apple: "/icon-512.png",
   },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
